@@ -1,0 +1,19 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    lines_longer_than_80_chars: false # Disable the rule for lines longer than 100 chars
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+  plugins:
+    - custom_lint
+
+custom_lint:
+  rules:
+    # You can now enable one specific rule in the "rules" list
+    - missing_provider_scope
+
+formatter:
+  line-length: 1000

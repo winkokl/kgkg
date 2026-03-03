@@ -1,0 +1,27 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/*.freezed.dart": true,
+    "**/*.g.dart": true,
+    "**/CVS": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "dart.lineLength": 1000,
+  "explorerExclude.backup": {},
+  "editor.bracketPairColorization.enabled": true,
+  "dart.previewFlutterUiGuides": true,
+  "[dart]": {
+    "editor.rulers": [
+      1000
+    ],
+    "prettier.printWidth": 1000,
+    "editor.formatOnSave": true
+  },
+  "dart.flutterSdkPath": ".fvm/versions/3.19.6"
+}

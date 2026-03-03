@@ -1,0 +1,20 @@
+import 'package:flutter/material.dart';
+
+const bgWhite = Color(0xffFFFFFF);
+const errorColor = Color(0xffCE0808);
+const textGray = Color(0xff909399);
+const darkBlue = Color(0xff0A2342);
+const brandColor = Color(0xff2378DB);
+const brandColorWithOpacity = Color(0xff008D8D);
+const brandColorGrey = Color(0xFF939598);
+const bgColor = Color(0xffF5F6F7);
+const iconBgColor = Color(0xfff5f5f5);
+const iconColor = Color(0xffE2E4E8);
+const Color black = Color(0xFF000000);
+const textFormfieldColor = Color(0xffD9E1EC);
+final borderColor = Colors.black.withOpacity(0.08);
+const successColor = Color(0xff4bb869);
+const shimmerBasedColor = Color(0xffe7e5e5);
+const shimmerHighlightColor = Color(0xf0f1f1f1);
+const textFieldFillColor = Color(0xffF3F3F3);
+const secondaryTextColor = Color(0xff8C93A3);

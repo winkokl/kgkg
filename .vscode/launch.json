@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Demo Flavor (Debug)",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "args": [
+        "--flavor",
+        "demo",
+        "--dart-define=flavor=demo",
+        "-v"
+      ],
+      "deviceId": "10HE1600TL0045F"
+    }
+  ]
+}
