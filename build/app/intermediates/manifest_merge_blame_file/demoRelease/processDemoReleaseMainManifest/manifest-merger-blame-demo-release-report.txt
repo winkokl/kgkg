@@ -1,0 +1,111 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.mgkaung.dms.demo"
+4    android:versionCode="4"
+5    android:versionName="1.0.0-demo" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="24"
+9        android:targetSdkVersion="35" />
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:3:1-62
+11-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:3:18-60
+12    <uses-permission android:name="android.permission.VIBRATE" />
+12-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:4:1-61
+12-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:4:18-59
+13    <uses-permission android:name="android.permission.BLUETOOTH" />
+13-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:5:1-64
+13-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:5:18-61
+14    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+14-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:6:1-70
+14-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:6:18-67
+15
+16    <!-- Needed for Android 12+ scanning -->
+17    <uses-permission
+17-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:9:1-116
+18        android:name="android.permission.BLUETOOTH_SCAN"
+18-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:9:18-66
+19        android:usesPermissionFlags="neverForLocation" />
+19-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:9:67-113
+20    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+20-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:10:1-72
+20-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:10:18-69
+21
+22    <!-- Optional: Discovering unpaired devices -->
+23    <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+23-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:13:1-74
+23-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:13:18-71
+24
+25    <!-- Location permission still required for scanning on older devices -->
+26    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+26-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:16:1-75
+26-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:16:18-72
+27
+28    <!-- Optional: for BLE printers -->
+29    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+29-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:19:1-77
+29-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:19:18-74
+30
+31    <application
+32        android:name="android.app.Application"
+32-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:22:9-42
+33        android:extractNativeLibs="false"
+34        android:icon="@mipmap/ic_launcher"
+34-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:23:9-43
+35        android:label="Mg Kaung" >
+35-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:21:9-44
+36        <activity
+36-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:24:9-44:20
+37            android:name="com.mgkaung.dms.MainActivity"
+37-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:25:13-41
+38            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+38-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:29:13-163
+39            android:exported="true"
+39-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:26:13-36
+40            android:hardwareAccelerated="true"
+40-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:30:13-47
+41            android:launchMode="singleTop"
+41-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:27:13-43
+42            android:theme="@style/LaunchTheme"
+42-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:28:13-47
+43            android:windowSoftInputMode="adjustResize" >
+43-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:31:13-55
+44
+45            <!--
+46                 Specifies an Android theme to apply to this Activity as soon as
+47                 the Android process has started. This theme is visible to the user
+48                 while the Flutter UI initializes. After that, this theme continues
+49                 to determine the Window background behind the Flutter UI.
+50            -->
+51            <meta-data
+51-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:36:13-39:17
+52                android:name="io.flutter.embedding.android.NormalTheme"
+52-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:37:15-70
+53                android:resource="@style/NormalTheme" />
+53-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:38:15-52
+54
+55            <intent-filter>
+55-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:40:13-43:29
+56                <action android:name="android.intent.action.MAIN" />
+56-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:41:17-68
+56-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:41:25-66
+57
+58                <category android:name="android.intent.category.LAUNCHER" />
+58-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:42:17-76
+58-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:42:27-74
+59            </intent-filter>
+60        </activity>
+61        <!--
+62             Don't delete the meta-data below.
+63             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+64        -->
+65        <meta-data
+65-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:47:9-49:33
+66            android:name="flutterEmbedding"
+66-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:48:13-44
+67            android:value="2" />
+67-->C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\AndroidManifest.xml:49:13-30
+68    </application>
+69
+70</manifest>

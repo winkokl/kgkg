@@ -23,5 +23,6 @@
     "prettier.printWidth": 1000,
     "editor.formatOnSave": true
   },
-  "dart.flutterSdkPath": ".fvm/versions/3.19.6"
+  "dart.flutterSdkPath": ".fvm/versions/3.19.6",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

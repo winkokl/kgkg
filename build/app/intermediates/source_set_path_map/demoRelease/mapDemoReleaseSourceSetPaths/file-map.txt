@@ -1,0 +1,9 @@
+com.mgkaung.dms.app-demo-0 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\demo\res
+com.mgkaung.dms.app-demoRelease-1 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\demoRelease\res
+com.mgkaung.dms.app-main-2 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\res
+com.mgkaung.dms.app-release-3 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\release\res
+com.mgkaung.dms.app-demo-4 C:\Users\BCMM148\Desktop\me\kgkg\build\app\generated\res\pngs\demo\release
+com.mgkaung.dms.app-demo-5 C:\Users\BCMM148\Desktop\me\kgkg\build\app\generated\res\resValues\demo\release
+com.mgkaung.dms.app-packageDemoReleaseResources-6 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\incremental\demoRelease\packageDemoReleaseResources\merged.dir
+com.mgkaung.dms.app-packageDemoReleaseResources-7 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\incremental\demoRelease\packageDemoReleaseResources\stripped.dir
+com.mgkaung.dms.app-demoRelease-8 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\merged_res\demoRelease\mergeDemoReleaseResources

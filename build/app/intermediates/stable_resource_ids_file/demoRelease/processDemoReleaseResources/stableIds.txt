@@ -1,0 +1,7 @@
+com.mgkaung.dms.demo:style/NormalTheme = 0x7f040001
+com.mgkaung.dms.demo:style/LaunchTheme = 0x7f040000
+com.mgkaung.dms.demo:mipmap/ic_launcher_round = 0x7f030002
+com.mgkaung.dms.demo:mipmap/ic_launcher_foreground = 0x7f030001
+com.mgkaung.dms.demo:mipmap/ic_launcher = 0x7f030000
+com.mgkaung.dms.demo:drawable/launch_background = 0x7f020000
+com.mgkaung.dms.demo:color/ic_launcher_background = 0x7f010000
