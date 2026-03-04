@@ -1,0 +1,10 @@
+com.mgkaung_dms.app-main-0 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\main\res
+com.mgkaung_dms.app-release-1 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\release\res
+com.mgkaung_dms.app-staging-2 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\staging\res
+com.mgkaung_dms.app-stagingRelease-3 C:\Users\BCMM148\Desktop\me\kgkg\android\app\src\stagingRelease\res
+com.mgkaung_dms.app-staging-4 C:\Users\BCMM148\Desktop\me\kgkg\build\app\generated\res\pngs\staging\release
+com.mgkaung_dms.app-staging-5 C:\Users\BCMM148\Desktop\me\kgkg\build\app\generated\res\resValues\staging\release
+com.mgkaung_dms.app-packageStagingReleaseResources-6 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\incremental\stagingRelease\packageStagingReleaseResources\merged.dir
+com.mgkaung_dms.app-packageStagingReleaseResources-7 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\incremental\stagingRelease\packageStagingReleaseResources\stripped.dir
+com.mgkaung_dms.app-staging-8 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\merged-not-compiled-resources\staging\release
+com.mgkaung_dms.app-stagingRelease-9 C:\Users\BCMM148\Desktop\me\kgkg\build\app\intermediates\merged_res\stagingRelease\mergeStagingReleaseResources
