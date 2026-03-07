@@ -114,7 +114,7 @@ class PrintInvoiceV2 {
   Future<void> _printItemsHeader(IThermalPrinterService service) async {
     await service.printLineWrap(1);
     await service.printText(
-      'Item${_padRight('Item', 18)}${'Price'.padLeft(5)}${'Qty'.padLeft(6)}${'amount'.padLeft(6)}',
+      '${'Item'.padRight(18)}${'Price'.padLeft(8)}${'Qty'.padLeft(6)}${'Amount'.padLeft(8)}',
       fontSize: 0,
       bold: true,
     );
@@ -123,12 +123,12 @@ class PrintInvoiceV2 {
   Future<void> _printItems(IThermalPrinterService service, InvoicePrintFormat invoice) async {
     for (final product in invoice.products) {
       final itemName = product.name.length > 18 ? product.name.substring(0, 18) : product.name;
-      final price = formatter.format(product.salePrice).padLeft(5);
+      final price = formatter.format(product.salePrice).padLeft(8);
       final quantity = product.quantity.toString().padLeft(6);
-      final amount = formatter.format(product.amount).padLeft(6);
+      final amount = formatter.format(product.amount).padLeft(8);
 
       await service.printText(
-        itemName + _padRight(itemName, 18) + price + quantity + amount,
+        itemName.padRight(18) + price + quantity + amount,
         fontSize: 0,
       );
     }
@@ -191,7 +191,4 @@ class PrintInvoiceV2 {
     );
   }
 
-  String _padRight(String text, int width) {
-    return text.length >= width ? text : text.padRight(width);
-  }
 }

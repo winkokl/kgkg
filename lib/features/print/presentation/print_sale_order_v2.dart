@@ -55,8 +55,7 @@ class PrintSaleOrderV2 {
         final price = formatter.format(p.salePrice).padLeft(7);
         final qty = p.quantity.toString().padLeft(5);
 
-        await service.printText(name + price + qty, fontSize: 0);
-        await service.printLineWrap(1);
+        await service.printText(name.padRight(21) + price + qty, fontSize: 0);
       }
 
       // Totals

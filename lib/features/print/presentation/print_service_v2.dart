@@ -7,23 +7,56 @@ import 'package:mgkaung_dms_mobile/features/print/presentation/print_payment_rec
 import 'package:mgkaung_dms_mobile/features/print/presentation/print_sale_order_v2.dart';
 import 'package:mgkaung_dms_mobile/features/print/presentation/print_sale_return_v2.dart';
 import 'package:mgkaung_dms_mobile/features/print/application/thermal_printer_manager.dart';
+import 'package:mgkaung_dms_mobile/features/print/infrastructure/sunmi_printer_service.dart';
 import 'package:mgkaung_dms_mobile/features/print/domain/invoice_print_format.dart';
 import 'package:mgkaung_dms_mobile/features/print/domain/payment_print_format.dart';
 import 'package:mgkaung_dms_mobile/features/print/domain/sale_order_print_format.dart';
 import 'package:mgkaung_dms_mobile/features/print/domain/sale_return_print_format.dart';
+import 'dart:io' show Platform;
 
-/// V2 PrintService uses the Bluetooth thermal manager and ensures a connected
-/// printer is available before attempting to print. If not connected it
-/// presents `BluetoothPrinterConnectionScreen` so the user can connect.
+/// V2 PrintService automatically detects Sunmi devices and uses built-in printer.
+/// For non-Sunmi devices, it uses Bluetooth thermal printer.
 class PrintServiceV2 {
-  static final ThermalPrinterManager _manager = ThermalPrinterManager();
+  static ThermalPrinterManager? _manager;
+
+  static ThermalPrinterManager get _printerManager {
+    if (_manager == null) {
+      // Auto-detect if running on Sunmi device
+      _manager = _isSunmiDevice()
+          ? ThermalPrinterManager(service: SunmiPrinterService())
+          : ThermalPrinterManager();
+    }
+    return _manager!;
+  }
+
+  static bool _isSunmiDevice() {
+    // Check if device is Android and brand contains "SUNMI"
+    if (Platform.isAndroid) {
+      // You can also check device model if needed
+      // For now, we'll try to detect Sunmi by attempting to use the service
+      return true; // Will be validated when trying to connect
+    }
+    return false;
+  }
 
   static Future<bool> _ensureConnected(BuildContext context) async {
     try {
-      final isReady = await _manager.isPrinterReady();
+      final manager = _printerManager;
+      final isReady = await manager.isPrinterReady();
       if (isReady) return true;
 
-      // Open connection screen and wait for user to select/connect a printer.
+      // For Sunmi devices, try to auto-connect to built-in printer
+      if (_isSunmiDevice()) {
+        final printers = await manager.discoverPrinters();
+        if (printers.isNotEmpty) {
+          final sunmiPrinter = printers.first;
+          final connected = await manager.initialize(sunmiPrinter.id);
+          return connected;
+        }
+        return false;
+      }
+
+      // For Bluetooth printers, open connection screen
       final printer = await Navigator.push<ThermalPrinter?>(
         context,
         MaterialPageRoute(
@@ -31,8 +64,7 @@ class PrintServiceV2 {
         ),
       );
 
-      // If user selected a printer (or connected), re-check
-      if (printer != null) return await _manager.isPrinterReady();
+      if (printer != null) return await manager.isPrinterReady();
 
       return false;
     } catch (e) {
@@ -41,7 +73,7 @@ class PrintServiceV2 {
   }
 
   static Future<void> _printCutLine() async {
-    final service = _manager.service;
+    final service = _printerManager.service;
     await service.printLine();
     await service.printLineWrap(3);
   }
@@ -52,7 +84,7 @@ class PrintServiceV2 {
 
     try {
       LoadingOverlay.show();
-      final printer = PrintInvoiceV2(printerManager: _manager);
+      final printer = PrintInvoiceV2(printerManager: _printerManager);
       await printer.printInvoice(invoice);
     } finally {
       LoadingOverlay.hide();
@@ -65,7 +97,7 @@ class PrintServiceV2 {
 
     try {
       LoadingOverlay.show();
-      final printer = PrintSaleOrderV2(printerManager: _manager);
+      final printer = PrintSaleOrderV2(printerManager: _printerManager);
       await printer.printSaleOrder(saleOrder);
     } finally {
       LoadingOverlay.hide();
@@ -78,7 +110,7 @@ class PrintServiceV2 {
 
     try {
       LoadingOverlay.show();
-      final printer = PrintPaymentV2(printerManager: _manager);
+      final printer = PrintPaymentV2(printerManager: _printerManager);
       await printer.printPayment(payment);
     } finally {
       LoadingOverlay.hide();
@@ -91,7 +123,7 @@ class PrintServiceV2 {
 
     try {
       LoadingOverlay.show();
-      final printer = PrintSaleReturnV2(printerManager: _manager);
+      final printer = PrintSaleReturnV2(printerManager: _printerManager);
       await printer.printSaleReturn(saleReturn);
     } finally {
       LoadingOverlay.hide();

@@ -60,8 +60,7 @@ class PrintSaleReturnV2 {
         final name = p.name.length > 21 ? p.name.substring(0, 21) : p.name;
         final price = formatter.format(p.salePrice).padLeft(7);
         final qty = p.returnQty.toString().padLeft(5);
-        await service.printText(name + price + qty, fontSize: 0);
-        await service.printLineWrap(1);
+        await service.printText(name.padRight(21) + price + qty, fontSize: 0);
       }
 
       await service.printText(''.padRight(6) + 'SubTotal :'.padLeft(15) + formatter.format(saleReturn.subtotal).padLeft(10), fontSize: 0);
