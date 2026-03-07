@@ -310,14 +310,12 @@ class SaleProductEditableWidget extends HookConsumerWidget {
       final salePrice = product.salePrice;
       final amount = amountController.text.toDouble();
 
-      final discount = discountType.value == AmountOrPercentStatus.amount ? discountFieldValue : (discountFieldValue / 100) * salePrice;
+      // Calculate discount: if AMOUNT type, multiply by qty; if PERCENT type, apply to total amount
+      final discount = discountType.value == AmountOrPercentStatus.amount ? discountFieldValue * qty : (discountFieldValue / 100) * amount;
 
       final tax = taxType.value == AmountOrPercentStatus.amount ? taxFieldValue : (taxFieldValue / 100) * amount;
 
-      // For AMT discount type: apply discount once (total discount)
-      // For PERCENT discount type: apply discount per unit (discount * qty)
-      final totalDiscount = discountType.value == AmountOrPercentStatus.amount ? discount : (discount * qty);
-      final totalAmount = amount + tax - totalDiscount;
+      final totalAmount = amount + tax - discount;
       totalAmountController.text = formatter.format(totalAmount.round());
     }
 
@@ -381,7 +379,7 @@ class SaleProductEditableWidget extends HookConsumerWidget {
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             validator: FormValidators.productValidator(
               '${product.availableQty}',
-              true,
+              product.availableQty > 0,
               null,
               'Available',
             ),
@@ -423,7 +421,11 @@ class SaleProductEditableWidget extends HookConsumerWidget {
           const SizedBox(height: 10),
           FormTextInput(
             label: "Discount",
+            isReadOnly: product.isPromotionItem,
+            // isReadOnly: true,
             keyboardType: TextInputType.number,
+            fillColor: product.isPromotionItem ? textFieldFillColor : null,
+            textStyle: product.isPromotionItem ? readOnlyTextStyle : null,
             controller: discountController,
             inputFormatters: textInputFormats(discountType.value),
             validator: (v) {
@@ -436,7 +438,7 @@ class SaleProductEditableWidget extends HookConsumerWidget {
               return null;
             },
             suffixicon: AmountOrPecentStatusWidget(
-              isSelectable: true,
+              isSelectable: !product.isPromotionItem,
               onSelect: () {
                 discountType.value = discountType.value.toggle;
                 discountController.text = '';

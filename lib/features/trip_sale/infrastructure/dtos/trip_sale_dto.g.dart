@@ -54,7 +54,6 @@ Map<String, dynamic> _$$TripSaleDTOImplToJson(_$TripSaleDTOImpl instance) {
   final val = <String, dynamic>{
     'type': instance.type,
     'sales_date': instance.date,
-    'sale_promotion_id': instance.salePromotionId,
   };
 
   void writeNotNull(String key, dynamic value) {

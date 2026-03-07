@@ -30,8 +30,10 @@ mixin _$TripSaleDTO {
   String get paymentTermName => throw _privateConstructorUsedError;
   @JsonKey(name: 'sales_date')
   String get date => throw _privateConstructorUsedError;
-  @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
-  int? get salePromotionId => throw _privateConstructorUsedError;
+  @JsonKey(
+      name: 'sale_promotion_id', fromJson: _intFromJson, includeToJson: false)
+  int? get salePromotionId =>
+      throw _privateConstructorUsedError; // @JsonKey(name: 'sale_promotion_detail_id', fromJson: _intFromJson, includeToJson: false) @Default(0) int? salePromotionDetailId,
   @JsonKey(name: 'formatted_sales_date', includeToJson: false)
   String get formattedDate => throw _privateConstructorUsedError;
   @JsonKey(name: 'trip_sale_id', includeToJson: false)
@@ -112,7 +114,10 @@ abstract class $TripSaleDTOCopyWith<$Res> {
       @JsonKey(name: 'payment_terms', includeToJson: false)
       String paymentTermName,
       @JsonKey(name: 'sales_date') String date,
-      @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+      @JsonKey(
+          name: 'sale_promotion_id',
+          fromJson: _intFromJson,
+          includeToJson: false)
       int? salePromotionId,
       @JsonKey(name: 'formatted_sales_date', includeToJson: false)
       String formattedDate,
@@ -361,7 +366,10 @@ abstract class _$$TripSaleDTOImplCopyWith<$Res>
       @JsonKey(name: 'payment_terms', includeToJson: false)
       String paymentTermName,
       @JsonKey(name: 'sales_date') String date,
-      @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+      @JsonKey(
+          name: 'sale_promotion_id',
+          fromJson: _intFromJson,
+          includeToJson: false)
       int? salePromotionId,
       @JsonKey(name: 'formatted_sales_date', includeToJson: false)
       String formattedDate,
@@ -603,7 +611,10 @@ class _$TripSaleDTOImpl extends _TripSaleDTO {
       @JsonKey(name: 'payment_terms', includeToJson: false)
       this.paymentTermName = '',
       @JsonKey(name: 'sales_date') this.date = '',
-      @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+      @JsonKey(
+          name: 'sale_promotion_id',
+          fromJson: _intFromJson,
+          includeToJson: false)
       this.salePromotionId = 0,
       @JsonKey(name: 'formatted_sales_date', includeToJson: false)
       this.formattedDate = '',
@@ -665,8 +676,10 @@ class _$TripSaleDTOImpl extends _TripSaleDTO {
   @JsonKey(name: 'sales_date')
   final String date;
   @override
-  @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+  @JsonKey(
+      name: 'sale_promotion_id', fromJson: _intFromJson, includeToJson: false)
   final int? salePromotionId;
+// @JsonKey(name: 'sale_promotion_detail_id', fromJson: _intFromJson, includeToJson: false) @Default(0) int? salePromotionDetailId,
   @override
   @JsonKey(name: 'formatted_sales_date', includeToJson: false)
   final String formattedDate;
@@ -901,7 +914,10 @@ abstract class _TripSaleDTO extends TripSaleDTO {
       @JsonKey(name: 'payment_terms', includeToJson: false)
       final String paymentTermName,
       @JsonKey(name: 'sales_date') final String date,
-      @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+      @JsonKey(
+          name: 'sale_promotion_id',
+          fromJson: _intFromJson,
+          includeToJson: false)
       final int? salePromotionId,
       @JsonKey(name: 'formatted_sales_date', includeToJson: false)
       final String formattedDate,
@@ -962,9 +978,10 @@ abstract class _TripSaleDTO extends TripSaleDTO {
   @JsonKey(name: 'sales_date')
   String get date;
   @override
-  @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson)
+  @JsonKey(
+      name: 'sale_promotion_id', fromJson: _intFromJson, includeToJson: false)
   int? get salePromotionId;
-  @override
+  @override // @JsonKey(name: 'sale_promotion_detail_id', fromJson: _intFromJson, includeToJson: false) @Default(0) int? salePromotionDetailId,
   @JsonKey(name: 'formatted_sales_date', includeToJson: false)
   String get formattedDate;
   @override

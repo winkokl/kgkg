@@ -83,7 +83,7 @@ class ProductDTO with _$ProductDTO {
     @JsonKey(name: "terminate_sale_qty", includeToJson: false) @Default(0) int terminateSaleQty,
     @JsonKey(name: "unit_type_data", includeToJson: false) @Default([]) List<UnitTypeDTO> unitTypeDTOs,
     @JsonKey(name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson) @Default(false) dynamic isPromotionItem,
-    @JsonKey(name: "sale_promotion_detail_id") int? salePromotionDetailId,
+    @JsonKey(name: "sale_promotion_detail_id", includeToJson: false) int? salePromotionDetailId,
     @JsonKey(name: "is_promotion_item_list", includeToJson: false) PromotionDetailDTO? promotionDetailDTO,
     @JsonKey(name: "item_back_product") @Default(null) InfoDTO? itemBackProduct,
     @JsonKey(name: "product_code_prefix", includeToJson: false) @Default("") String? productCodePrefix,
@@ -132,9 +132,8 @@ class ProductDTO with _$ProductDTO {
       availableReturnQty: product.availableReturnQty,
       consignmentContractQty: isConsignment ? product.consignmentContractQty : null,
       isPromotionItem: product.isPromotionItem ? true : null,
-      salePromotionDetailId: product.promotionDetail.salePromotionDetailId == -1 ? null : product.promotionDetail.salePromotionDetailId,
       promotionDetailDTO: product.isPromotionItem ? PromotionDetailDTO.fromDomain(product.promotionDetail) : null,
-      itemBackProduct: product.itemBackProduct != null ? InfoDTO.fromDomain(product.itemBackProduct) : null,
+      itemBackProduct: InfoDTO.fromDomain(product.itemBackProduct),
     );
   }
 

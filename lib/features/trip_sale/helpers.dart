@@ -24,7 +24,8 @@ List<Product> getModifiedProducts(TripSaleRequest tripSaleRequest, [bool isTripS
         warehouse: Warehouse(
           id: tripSaleRequest.warehouse.id,
           name: tripSaleRequest.warehouse.name,
-        ));
+        ),
+        isPromotionItem: false);
     tmpPrductList.add(product);
   }
   return tmpPrductList;

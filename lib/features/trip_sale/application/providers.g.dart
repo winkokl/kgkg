@@ -865,7 +865,7 @@ final paginatedTripManagementNotifierProvider =
 typedef _$PaginatedTripManagementNotifier
     = AutoDisposeAsyncNotifier<PaginatedData<TripManagement>>;
 String _$paginatedTripProposalNotifierHash() =>
-    r'eb1486931c8710f656e939696c9a93521aac799d';
+    r'eaae4dc425cc1991df3dd300249e439b1ebfeef9';
 
 /// See also [PaginatedTripProposalNotifier].
 @ProviderFor(PaginatedTripProposalNotifier)

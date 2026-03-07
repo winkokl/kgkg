@@ -54,6 +54,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
     final productlist = ref.watch(productListNotifierProvider);
 
     final promtionItemList = productlist.where((element) => element.isPromotionItem).toList();
+    final hasPromotionItems = promtionItemList.isNotEmpty;
 
     final subtotal = productlist.isEmpty
         ? 0
@@ -126,6 +127,43 @@ class DisplayTotalWidget extends HookConsumerWidget {
       return () => otherChargesController.removeListener(updateTotalAmount);
     }, [otherChargesController]);
 
+    // Calculate discount and tax from products when promotion items exist
+    useEffect(() {
+      if (hasPromotionItems) {
+        // Calculate total discount from all products (for display only)
+        final totalProductDiscount = productlist.isEmpty
+            ? 0.0
+            : productlist.map((e) {
+                final qty = e.quantity;
+                final discountPerUnit = e.discountAmount;
+                final discountTypeLocal = e.discountType;
+
+                // Calculate discount based on type
+                if (discountTypeLocal == AmountOrPercentStatus.amount) {
+                  return discountPerUnit * qty;
+                } else {
+                  return (discountPerUnit / 100) * e.amount;
+                }
+              }).reduce((value, element) => value + element);
+
+        // Calculate total tax from all products (for display only)
+        final totalProductTax = productlist.isEmpty ? 0.0 : productlist.map((e) => e.taxAmount).reduce((value, element) => value + element);
+
+        // Update the discount and tax amounts (for display only)
+        discountAmount.value = totalProductDiscount;
+        taxAmount.value = totalProductTax;
+
+        // Update controllers to show the calculated values
+        discountController.text = formatter.format(totalProductDiscount);
+        taxController.text = formatter.format(totalProductTax);
+
+        // Grand total = subtotal (already includes discount and tax) + other charges
+        final totalAmount = subtotal + otherChargesAmount.value;
+        grandTotal.value = roundToNextHundred(totalAmount);
+      }
+      return null;
+    }, [hasPromotionItems, productlist.length, subtotal]);
+
     print("sale promotion in display total widget: $salePromotion");
     print("sale promotion name in display total widget: ${salePromotion?.promotionName}");
 
@@ -135,7 +173,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
           TotalProductCard(
             ontap: () => ref.watch(goRouterProvider).push(ProductListRoute(hasAction: !isReadOnly, isReturn: false).location),
           ),
-          if (salePromotion != null) ...[
+          if (salePromotion != null && salePromotion!.id != -1) ...[
             const SizedBox(height: 15),
             InkWell(
               onTap: () async => await showPromotionOverView(context, salePromotion!, promtionItemList),
@@ -166,7 +204,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
             ),
             const SizedBox(height: 30),
           ],
-          if (salePromotion == null) const SizedBox(height: 100),
+          if (salePromotion == null || salePromotion?.id == -1) const SizedBox(height: 100),
           Container(
             color: bgWhite,
             child: Padding(
@@ -192,12 +230,12 @@ class DisplayTotalWidget extends HookConsumerWidget {
                       Expanded(
                         flex: 2,
                         child: FormTextInput(
-                          isReadOnly: isReadOnly,
+                          isReadOnly: isReadOnly || hasPromotionItems,
                           controller: discountController,
                           inputFormatters: textInputFormats(discountType.value),
-                          fillColor: isReadOnly ? textFieldFillColor : null,
+                          fillColor: isReadOnly || hasPromotionItems ? textFieldFillColor : null,
                           suffixicon: AmountOrPecentStatusWidget(
-                            isSelectable: !isReadOnly,
+                            isSelectable: isReadOnly && hasPromotionItems,
                             onSelect: () {
                               discountType.value = discountType.value.toggle;
                               discountController.text = "";
@@ -227,12 +265,12 @@ class DisplayTotalWidget extends HookConsumerWidget {
                       Expanded(
                         flex: 2,
                         child: FormTextInput(
-                          isReadOnly: isReadOnly,
+                          isReadOnly: isReadOnly || hasPromotionItems,
                           controller: taxController,
                           inputFormatters: textInputFormats(taxType.value),
-                          fillColor: isReadOnly ? textFieldFillColor : null,
+                          fillColor: isReadOnly || hasPromotionItems ? textFieldFillColor : null,
                           suffixicon: AmountOrPecentStatusWidget(
-                            isSelectable: !isReadOnly,
+                            isSelectable: !isReadOnly && !hasPromotionItems,
                             onSelect: () {
                               taxType.value = taxType.value.toggle;
                               taxController.text = "";

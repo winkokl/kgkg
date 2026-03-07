@@ -24,7 +24,7 @@ mixin _$PromotionDetailDTO {
   String get rangeType => throw _privateConstructorUsedError;
   @JsonKey(name: "sale_promotion_id")
   String get salePromotionId => throw _privateConstructorUsedError;
-  @JsonKey(name: "sale_promotion_detail_id")
+  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
   int get salePromotionDetailId => throw _privateConstructorUsedError;
   @JsonKey(name: "promotion_name")
   String get promotionName => throw _privateConstructorUsedError;
@@ -50,7 +50,8 @@ abstract class $PromotionDetailDTOCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: "range_type") String rangeType,
       @JsonKey(name: "sale_promotion_id") String salePromotionId,
-      @JsonKey(name: "sale_promotion_detail_id") int salePromotionDetailId,
+      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      int salePromotionDetailId,
       @JsonKey(name: "promotion_name") String promotionName,
       @JsonKey(name: "product_id") int productId,
       @JsonKey(name: "sku") List<SkuDTO> sku,
@@ -122,7 +123,8 @@ abstract class _$$PromotionDetailDTOImplCopyWith<$Res>
   $Res call(
       {@JsonKey(name: "range_type") String rangeType,
       @JsonKey(name: "sale_promotion_id") String salePromotionId,
-      @JsonKey(name: "sale_promotion_detail_id") int salePromotionDetailId,
+      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      int salePromotionDetailId,
       @JsonKey(name: "promotion_name") String promotionName,
       @JsonKey(name: "product_id") int productId,
       @JsonKey(name: "sku") List<SkuDTO> sku,
@@ -187,7 +189,7 @@ class _$PromotionDetailDTOImpl extends _PromotionDetailDTO {
   const _$PromotionDetailDTOImpl(
       {@JsonKey(name: "range_type") this.rangeType = "",
       @JsonKey(name: "sale_promotion_id") this.salePromotionId = "",
-      @JsonKey(name: "sale_promotion_detail_id")
+      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
       this.salePromotionDetailId = -1,
       @JsonKey(name: "promotion_name") this.promotionName = "",
       @JsonKey(name: "product_id") this.productId = -1,
@@ -207,7 +209,7 @@ class _$PromotionDetailDTOImpl extends _PromotionDetailDTO {
   @JsonKey(name: "sale_promotion_id")
   final String salePromotionId;
   @override
-  @JsonKey(name: "sale_promotion_detail_id")
+  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
   final int salePromotionDetailId;
   @override
   @JsonKey(name: "promotion_name")
@@ -288,7 +290,7 @@ abstract class _PromotionDetailDTO extends PromotionDetailDTO {
   const factory _PromotionDetailDTO(
           {@JsonKey(name: "range_type") final String rangeType,
           @JsonKey(name: "sale_promotion_id") final String salePromotionId,
-          @JsonKey(name: "sale_promotion_detail_id")
+          @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
           final int salePromotionDetailId,
           @JsonKey(name: "promotion_name") final String promotionName,
           @JsonKey(name: "product_id") final int productId,
@@ -307,7 +309,7 @@ abstract class _PromotionDetailDTO extends PromotionDetailDTO {
   @JsonKey(name: "sale_promotion_id")
   String get salePromotionId;
   @override
-  @JsonKey(name: "sale_promotion_detail_id")
+  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
   int get salePromotionDetailId;
   @override
   @JsonKey(name: "promotion_name")

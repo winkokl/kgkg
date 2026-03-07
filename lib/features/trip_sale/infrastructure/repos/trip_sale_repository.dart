@@ -34,13 +34,22 @@ class TripSaleRepository {
     required Pagination pagination,
     CancelToken? cancelToken,
     Allfilter? allfilter,
+    List<int>? assignedTripIds,
   }) async {
     final data = await remoteDataSource.getTripProposals(
       pagination: pagination,
       cancelToken: cancelToken,
       allFilterDTO: allfilter == null ? null : AllFilterDTO.fromDomain(allfilter),
     );
-    return data.map((e) => e.toDomain()).toList();
+
+    // Filter by assigned trips if provided
+    final allProposals = data.map((e) => e.toDomain()).toList();
+
+    if (assignedTripIds != null && assignedTripIds.isNotEmpty) {
+      return allProposals.where((proposal) => assignedTripIds.contains(proposal.id)).toList();
+    }
+
+    return allProposals;
   }
 
   Future<TripProposal> getTripProposalById(int id) async {

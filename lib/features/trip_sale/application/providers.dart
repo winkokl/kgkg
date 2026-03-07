@@ -335,12 +335,42 @@ class PaginatedTripProposalNotifier extends PaginatedAsyncNotifier<TripProposal>
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds;
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      // Fetch all trip user assignments (don't use cancelToken to avoid cancellation errors)
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      // Find the assignment for the current user and extract trip IDs
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      }
+    } on DioException catch (e) {
+      // If request is cancelled or fails, show all trip proposals
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = null;
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = null;
+    }
+
     return await ref.guardXFetch(() async {
       if (query.isEmpty) {
         final res = await tripsaleRepo.getTripProposals(
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripProposal>(
@@ -359,6 +389,7 @@ class PaginatedTripProposalNotifier extends PaginatedAsyncNotifier<TripProposal>
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripProposal>(
@@ -382,10 +413,40 @@ class PaginatedTripProposalNotifier extends PaginatedAsyncNotifier<TripProposal>
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds;
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      // Fetch all trip user assignments (don't use cancelToken to avoid cancellation errors)
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      // Find the assignment for the current user and extract trip IDs
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      }
+    } on DioException catch (e) {
+      // If request is cancelled or fails, show all trip proposals
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = null;
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = null;
+    }
+
     final res = await tripsaleRepo.getTripProposals(
       pagination: (page: page, query: query),
       cancelToken: cancelToken,
       allfilter: filter,
+      assignedTripIds: assignedTripIds,
     );
     return PaginatedData<TripProposal>(
       items: res,

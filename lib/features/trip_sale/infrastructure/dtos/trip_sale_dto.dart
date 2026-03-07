@@ -43,7 +43,8 @@ class TripSaleDTO with _$TripSaleDTO {
     @JsonKey(name: 'payment_type_name', includeToJson: false) @Default('') String paymentTypeName,
     @JsonKey(name: 'payment_terms', includeToJson: false) @Default('') String paymentTermName,
     @JsonKey(name: 'sales_date') @Default('') String date,
-    @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson) @Default(0) int? salePromotionId,
+    @JsonKey(name: 'sale_promotion_id', fromJson: _intFromJson, includeToJson: false) @Default(0) int? salePromotionId,
+    // @JsonKey(name: 'sale_promotion_detail_id', fromJson: _intFromJson, includeToJson: false) @Default(0) int? salePromotionDetailId,
     @JsonKey(name: 'formatted_sales_date', includeToJson: false) @Default('') String formattedDate,
     @JsonKey(name: 'trip_sale_id', includeToJson: false) @Default(-1) int id,
     @JsonKey(name: 'trip_sale_request_id', includeIfNull: false) int? tripSaleRequestId,
@@ -100,11 +101,6 @@ class TripSaleDTO with _$TripSaleDTO {
       otherCharges: sale.otherChargesAmount,
       grandTotal: sale.grandtotal,
       businessUnitId: sale.businessUnit.id == -1 ? null : sale.businessUnit.id,
-      salePromotionId: sale.salePromotion.id == -1 || sale.salePromotion.id == "-1"
-          ? null
-          : sale.salePromotion.id is int
-              ? sale.salePromotion.id
-              : int.tryParse(sale.salePromotion.id.toString()),
     );
   }
 

@@ -12,7 +12,7 @@ class PromotionDetailDTO with _$PromotionDetailDTO {
   const factory PromotionDetailDTO({
     @JsonKey(name: "range_type") @Default("") String rangeType,
     @JsonKey(name: "sale_promotion_id") @Default("") String salePromotionId,
-    @JsonKey(name: "sale_promotion_detail_id") @Default(-1) int salePromotionDetailId,
+    @JsonKey(name: "sale_promotion_detail_id", includeToJson: false) @Default(-1) int salePromotionDetailId,
     @JsonKey(name: "promotion_name") @Default("") String promotionName,
     @JsonKey(name: "product_id") @Default(-1) int productId,
     @JsonKey(name: "sku") @Default([]) List<SkuDTO> sku,

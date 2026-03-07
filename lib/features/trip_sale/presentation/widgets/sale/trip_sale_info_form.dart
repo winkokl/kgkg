@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mgkaung_dms_mobile/core/constants.dart';
+import 'package:mgkaung_dms_mobile/core/enums/amount_or_percent_status.dart';
 import 'package:mgkaung_dms_mobile/core/enums/trip_sale_method.dart';
 import 'package:mgkaung_dms_mobile/core/helpers/dateformat.dart';
 import 'package:mgkaung_dms_mobile/core/presentation/routing/router.dart';
@@ -154,14 +155,24 @@ class TripSaleInfoForm extends HookConsumerWidget {
           LoadingOverlay.hide();
           final productList = data.fold(() => null, (t) => t);
           final tmpProducts = productList?.map((e) {
+            // Use proposalQty if available, otherwise use the existing quantity from product
+            final quantity = e.proposalQty ?? e.quantity;
+            final currentProductAmount = quantity * e.salePrice;
+
+            // Calculate tax based on type
+            final tax = e.secondarySaleTaxType == AmountOrPercentStatus.amount ? e.secondarySaleTax : (e.secondarySaleTax / 100) * currentProductAmount;
+
             final product = e.copyWith(
               isTrip: true,
               isViewOnly: false,
               availableQty: e.availableQty,
-              quantity: 0,
+              quantity: quantity,
+              amount: currentProductAmount,
+              totalAmount: currentProductAmount + tax,
               taxAmount: e.secondarySaleTax,
               taxType: e.secondarySaleTaxType,
               warehouse: warehouse ?? const Warehouse(),
+              isPromotionItem: false,
             );
             return product;
           }).toList();
@@ -258,7 +269,7 @@ class TripSaleInfoForm extends HookConsumerWidget {
                 const SizedBox(height: 20),
                 if (tripSaleMethod == TripSaleMethod.saleRequest) ...[
                   FormTextInput(
-                    label: "Trip Sale ID *",
+                    label: "Trip Sale IDfsadfdsfsadf *",
                     hintText: "Select Trip Sale ID",
                     key: UniqueKey(),
                     isReadOnly: true,
@@ -451,10 +462,10 @@ class TripSaleInfoForm extends HookConsumerWidget {
                           width: 60,
                           child: Row(
                             children: [
-                              InkWell(
-                                onTap: () => saleNotifier.setPromotion(const SalePromotion()),
-                                child: const Icon(Icons.delete_forever, size: 22, color: errorColor),
-                              ),
+                              // InkWell(
+                              //   onTap: () => saleNotifier.setPromotion(const SalePromotion()),
+                              //   child: const Icon(Icons.delete_forever, size: 22, color: errorColor),
+                              // ),
                               const SizedBox(width: 10),
                               InkWell(
                                 onTap: () => ref.watch(goRouterProvider).push(SalePromotionDetailRoute(promotion.id).location),
