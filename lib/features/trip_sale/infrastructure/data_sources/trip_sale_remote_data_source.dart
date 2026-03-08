@@ -205,7 +205,32 @@ class TripSaleRemoteDataSource {
 
   Future<CustomResponse> createTripSale(TripSaleDTO saleDTO) async {
     final data = saleDTO.toJson();
-    print("data is $data");
+
+    // LOG: Print the final JSON being sent to API
+    print('╔════════════════════════════════════════════════════════════');
+    print('║ CREATE TRIP SALE - FINAL JSON SENT TO API');
+    print('╠════════════════════════════════════════════════════════════');
+    print('║ API URL: ${ApiBase.baseUrl}${routes.tripSaleCreate}');
+    print('╠════════════════════════════════════════════════════════════');
+    print('║ REQUEST DATA:');
+    print(data);
+    print('╠════════════════════════════════════════════════════════════');
+    if (data['products'] != null && data['products'] is List) {
+      print('║ PRODUCTS COUNT: ${(data['products'] as List).length}');
+      for (var i = 0; i < (data['products'] as List).length; i++) {
+        final product = data['products'][i];
+        print('║ ');
+        print('║ Product #$i:');
+        print('║   - product_id: ${product['product_id']}');
+        print('║   - qty: ${product['qty']}');
+        print('║   - HAS is_promotion_item: ${product.containsKey("is_promotion_item")}');
+        if (product.containsKey("is_promotion_item")) {
+          print('║   - is_promotion_item VALUE: ${product["is_promotion_item"]}');
+        }
+      }
+    }
+    print('╚════════════════════════════════════════════════════════════');
+
     return await dioClient.post(
       '${ApiBase.baseUrl}${routes.tripSaleCreate}',
       data: data,

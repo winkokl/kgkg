@@ -45,11 +45,13 @@ class TripSaleRepository {
     // Filter by assigned trips if provided
     final allProposals = data.map((e) => e.toDomain()).toList();
 
-    if (assignedTripIds != null && assignedTripIds.isNotEmpty) {
-      return allProposals.where((proposal) => assignedTripIds.contains(proposal.id)).toList();
+    // If assignedTripIds is null or empty, show no data (user has no trip assignments)
+    if (assignedTripIds == null || assignedTripIds.isEmpty) {
+      return [];
     }
 
-    return allProposals;
+    // Filter and return only proposals for assigned trips
+    return allProposals.where((proposal) => assignedTripIds.contains(proposal.id)).toList();
   }
 
   Future<TripProposal> getTripProposalById(int id) async {
@@ -85,11 +87,13 @@ class TripSaleRepository {
     // Filter by assigned trips if provided
     final allRequests = data.map((e) => e.toDomain()).toList();
 
-    if (assignedTripIds != null && assignedTripIds.isNotEmpty) {
-      return allRequests.where((request) => assignedTripIds.contains(request.tripId)).toList();
+    // If assignedTripIds is null or empty, show no data (user has no trip assignments)
+    if (assignedTripIds == null || assignedTripIds.isEmpty) {
+      return [];
     }
 
-    return allRequests;
+    // Filter and return only requests for assigned trips
+    return allRequests.where((request) => assignedTripIds.contains(request.tripId)).toList();
   }
 
   Future<TripSaleRequest> getTripSaleRequestById(int id) async {

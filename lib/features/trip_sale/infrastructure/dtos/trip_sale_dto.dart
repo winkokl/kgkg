@@ -79,7 +79,7 @@ class TripSaleDTO with _$TripSaleDTO {
   factory TripSaleDTO.fromJson(Map<String, dynamic> json) => _$TripSaleDTOFromJson(json);
 
   factory TripSaleDTO.fromDomain(TripSale sale) {
-    return TripSaleDTO(
+    final dto = TripSaleDTO(
       id: sale.id,
       type: sale.tripSaleMethod.id,
       date: sale.date,
@@ -102,6 +102,21 @@ class TripSaleDTO with _$TripSaleDTO {
       grandTotal: sale.grandtotal,
       businessUnitId: sale.businessUnit.id == -1 ? null : sale.businessUnit.id,
     );
+
+    // LOG: Print the full JSON being sent to backend
+    print('========================================');
+    print('TRIP SALE DTO - FULL JSON TO BACKEND:');
+    print('========================================');
+    final jsonData = dto.toJson();
+    print(jsonData);
+    print('');
+    print('PRODUCTS JSON (${(jsonData['products'] as List).length} products):');
+    for (var i = 0; i < (jsonData['products'] as List).length; i++) {
+      print('  Product $i: ${jsonData['products'][i]}');
+    }
+    print('========================================');
+
+    return dto;
   }
 
   TripSale toDomain() {

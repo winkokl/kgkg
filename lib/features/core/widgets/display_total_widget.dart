@@ -225,7 +225,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Discount--", color: secondaryTextColor)),
+                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Discount", color: secondaryTextColor)),
                       ),
                       Expanded(
                         flex: 2,

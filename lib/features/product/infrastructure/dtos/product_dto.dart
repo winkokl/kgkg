@@ -108,7 +108,7 @@ class ProductDTO with _$ProductDTO {
   factory ProductDTO.fromJson(Map<String, dynamic> json) => _$ProductDTOFromJson(json);
 
   factory ProductDTO.fromDomain(Product product, [bool isConsignment = false, bool isReturn = false, bool isTrip = false]) {
-    return ProductDTO(
+    final dto = ProductDTO(
       id: product.id,
       secondarySaleReturnDetailId: product.secondarySaleReturnDetailId,
       salePrice: product.salePrice,
@@ -137,6 +137,17 @@ class ProductDTO with _$ProductDTO {
       promotionDetailDTO: isTrip ? null : (product.isPromotionItem ? PromotionDetailDTO.fromDomain(product.promotionDetail) : null),
       itemBackProduct: isTrip ? null : (product.itemBackProduct.promotionName.isEmpty ? null : InfoDTO.fromDomain(product.itemBackProduct)),
     );
+
+    // LOG: Print product JSON for trip sales
+    if (isTrip) {
+      final productJson = dto.toJson();
+      print('--- Product ID ${product.id} (${product.name}) JSON ---');
+      print('  isPromotionItem in DTO: ${dto.isPromotionItem}');
+      print('  isPromotionItem in JSON: ${productJson.containsKey("is_promotion_item") ? productJson["is_promotion_item"] : "NOT IN JSON"}');
+      print('  Full Product JSON: $productJson');
+    }
+
+    return dto;
   }
 
   Product toDomain() {

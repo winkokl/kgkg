@@ -127,7 +127,7 @@ class TripSaleFormScreen extends ConsumerWidget {
                       const SizedBox(height: 10),
                     ],
                     ActionButton(
-                      label: indicatorValue == 0 || indicatorValue == 1 ? "Next" : "Submit hi",
+                      label: indicatorValue == 0 || indicatorValue == 1 ? "Next" : "Submit",
                       onPressed: () {
                         if (indicatorValue == 0 && formKey.currentState!.validate() == true) {
                           formKey.currentState!.save();
