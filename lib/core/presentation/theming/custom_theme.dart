@@ -6,8 +6,8 @@ class CustomTheme {
     return ThemeData(
       brightness: Brightness.light,
       // dividerColor: Colors.transparent,
-      // cardTheme: const CardTheme(shadowColor: brandColor),
-      cardTheme: const CardThemeData(shadowColor: brandColor),
+      cardTheme: const CardTheme(shadowColor: brandColor),
+      // cardTheme: const CardThemeData(shadowColor: brandColor),
       listTileTheme: const ListTileThemeData(
           visualDensity: VisualDensity(vertical: -4, horizontal: -4),
           dense: true,
@@ -66,14 +66,14 @@ class CustomTheme {
         checkColor: MaterialStateProperty.all(bgWhite),
         fillColor: MaterialStateProperty.all(Colors.transparent),
       ),
-      // tabBarTheme: const TabBarTheme(
-      //   labelColor: black,
-      //   indicator: BoxDecoration(border: Border(bottom: BorderSide(color: black, width: 2))),
-      // ),
-      tabBarTheme: const TabBarThemeData(
+      tabBarTheme: const TabBarTheme(
         labelColor: black,
         indicator: BoxDecoration(border: Border(bottom: BorderSide(color: black, width: 2))),
       ),
+      // tabBarTheme: const TabBarThemeData(
+      //   labelColor: black,
+      //   indicator: BoxDecoration(border: Border(bottom: BorderSide(color: black, width: 2))),
+      // ),
       dividerTheme: DividerThemeData(color: black.withOpacity(0.1)),
       inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(
@@ -130,8 +130,8 @@ class CustomTheme {
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(padding: MaterialStateProperty.all(EdgeInsets.zero), visualDensity: const VisualDensity(horizontal: -4, vertical: -4)),
       ),
-      // dialogTheme: const DialogTheme(backgroundColor: bgWhite),
-      dialogTheme: const DialogThemeData(backgroundColor: bgWhite),
+      dialogTheme: const DialogTheme(backgroundColor: bgWhite),
+      // dialogTheme: const DialogThemeData(backgroundColor: bgWhite),
       splashColor: Colors.transparent,
       focusColor: Colors.transparent,
       hoverColor: Colors.transparent,
