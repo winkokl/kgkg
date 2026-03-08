@@ -218,13 +218,10 @@ class MakeTripSalePaymentReceiveScreen extends HookConsumerWidget {
                   onPressed: () {
                     if (formKey.currentState!.validate() == true) {
                       formKey.currentState!.save();
-                      if (signature.value == null) {
-                        CustomDialog.showFailureDialog(title: "Failed", msg: "No signature is found.", onPressed: () => context.pop());
-                        return;
-                      }
+                      // Signature is now optional - no validation required
                       ref.read(asyncTripSaleFormNotifierProvider.notifier).makePaymentReceive(
                           attachment.value,
-                          signature.value!,
+                          signature.value,
                           TripSaleReceipt(
                             paymentReciveDate: paymentReceiveDate.value,
                             paymentReceiveAmount: paidAmountController.text.toDouble(),

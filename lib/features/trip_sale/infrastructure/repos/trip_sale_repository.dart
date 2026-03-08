@@ -363,7 +363,7 @@ class TripSaleRepository {
     return allReceipts.where((receipt) => invoiceIds.contains(receipt.tripSaleInvoiceId)).toList();
   }
 
-  Future<CustomResponse> makePaymentReceive(File? attachment, File signFile, TripSaleReceipt tripSaleReceipt) async {
+  Future<CustomResponse> makePaymentReceive(File? attachment, File? signFile, TripSaleReceipt tripSaleReceipt) async {
     final res = await remoteDataSource.makePaymentReceive(attachment, signFile, TripSaleReceiptDTO.fromDomain(tripSaleReceipt));
     return res.copyWith(data: TripSaleReceiptDTO.fromJson(res.data).toDomain());
   }

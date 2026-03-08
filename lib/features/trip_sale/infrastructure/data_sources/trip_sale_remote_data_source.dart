@@ -315,7 +315,7 @@ class TripSaleRemoteDataSource {
     return (response['data'] as List).map((e) => TripSaleReceiptDTO.fromJson(e)).toList();
   }
 
-  Future<CustomResponse> makePaymentReceive(File? attachment, File signFile, TripSaleReceiptDTO tripSaleReceiptDTO) async {
+  Future<CustomResponse> makePaymentReceive(File? attachment, File? signFile, TripSaleReceiptDTO tripSaleReceiptDTO) async {
     final formData = FormData();
 
     // Add JSON data to the FormData
@@ -337,15 +337,18 @@ class TripSaleRemoteDataSource {
       );
     }
 
-    formData.files.add(
-      MapEntry(
-        'signature',
-        await MultipartFile.fromFile(
-          signFile.path,
-          filename: signFile.path.split('/').last,
+    // Signature is now optional
+    if (signFile != null) {
+      formData.files.add(
+        MapEntry(
+          'signature',
+          await MultipartFile.fromFile(
+            signFile.path,
+            filename: signFile.path.split('/').last,
+          ),
         ),
-      ),
-    );
+      );
+    }
 
     return await dioClient.post(
       '${ApiBase.baseUrl}${routes.paymentReceiveCreate}',

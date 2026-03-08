@@ -107,7 +107,7 @@ class AsyncTripSaleFormNotifier extends _$AsyncTripSaleFormNotifier {
     });
   }
 
-  Future<void> makePaymentReceive(File? attachment, File signFile, TripSaleReceipt tripSaleReceipt) async {
+  Future<void> makePaymentReceive(File? attachment, File? signFile, TripSaleReceipt tripSaleReceipt) async {
     state = const AsyncValue.loading();
 
     state = await state.guardX(() async {
