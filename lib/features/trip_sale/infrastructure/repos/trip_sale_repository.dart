@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:mgkaung_dms_mobile/core/constants.dart';
+import 'package:mgkaung_dms_mobile/core/enums/trip_sale_method.dart';
 import 'package:mgkaung_dms_mobile/core/infrastructure/custom_response.dart';
 import 'package:mgkaung_dms_mobile/features/core/domain/all_filter.dart';
 import 'package:mgkaung_dms_mobile/features/core/dtos/all_filter_dto.dart';
@@ -142,13 +143,53 @@ class TripSaleRepository {
     required Pagination pagination,
     CancelToken? cancelToken,
     Allfilter? allfilter,
+    List<int>? assignedTripIds,
   }) async {
     final data = await remoteDataSource.getTripSales(
       pagination: pagination,
       cancelToken: cancelToken,
       allFilterDTO: allfilter == null ? null : AllFilterDTO.fromDomain(allfilter),
     );
-    return data.map((e) => e.toDomain()).toList();
+
+    final allSales = data.map((e) => e.toDomain()).toList();
+
+    // If user has no trip assignments, show no data
+    if (assignedTripIds == null || assignedTripIds.isEmpty) {
+      return [];
+    }
+
+    // Get all trip sale requests for assigned trips to get their IDs
+    final tripSaleRequests = await getTripSaleRequests(
+      pagination: pagination,
+      cancelToken: cancelToken,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    // Get all trip proposals for assigned trips to get their IDs
+    final tripProposals = await getTripProposals(
+      pagination: pagination,
+      cancelToken: cancelToken,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    // Extract IDs
+    final tripSaleRequestIds = tripSaleRequests.map((req) => req.id).toSet();
+    final tripProposalIds = tripProposals.map((prop) => prop.id).toSet();
+
+    // Filter trip sales
+    return allSales.where((sale) {
+      // For sale request type, check if tripSaleRequest.id is in our allowed list
+      if (sale.tripSaleMethod == TripSaleMethod.saleRequest) {
+        return tripSaleRequestIds.contains(sale.tripSaleRequest.id);
+      }
+      // For extra sale type, check if tripProposal.id is in our allowed list
+      else if (sale.tripSaleMethod == TripSaleMethod.extraSale) {
+        return tripProposalIds.contains(sale.tripProposal.id);
+      }
+      return false;
+    }).toList();
   }
 
   Future<TripSale> getTripSaleById(int id) async {
@@ -173,13 +214,62 @@ class TripSaleRepository {
     required Pagination pagination,
     CancelToken? cancelToken,
     Allfilter? allfilter,
+    List<int>? assignedTripIds,
   }) async {
     final data = await remoteDataSource.getTripSaleInvoices(
       pagination: pagination,
       cancelToken: cancelToken,
       allFilterDTO: allfilter == null ? null : AllFilterDTO.fromDomain(allfilter),
     );
-    return data.map((e) => e.toDomain()).toList();
+
+    final allInvoices = data.map((e) => e.toDomain()).toList();
+
+    // If user has no trip assignments, show no data
+    if (assignedTripIds == null || assignedTripIds.isEmpty) {
+      return [];
+    }
+
+    // Get trip sale requests and proposals for assigned trips
+    final tripSaleRequests = await getTripSaleRequests(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    final tripProposals = await getTripProposals(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    // Get ALL trip sales (not paginated) and filter by assigned trip requests/proposals
+    final allTripSalesData = await remoteDataSource.getTripSales(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allFilterDTO: null,
+    );
+
+    final allTripSales = allTripSalesData.map((e) => e.toDomain()).toList();
+
+    final tripSaleRequestIds = tripSaleRequests.map((req) => req.id).toSet();
+    final tripProposalIds = tripProposals.map((prop) => prop.id).toSet();
+
+    final filteredTripSales = allTripSales.where((sale) {
+      if (sale.tripSaleMethod == TripSaleMethod.saleRequest) {
+        return tripSaleRequestIds.contains(sale.tripSaleRequest.id);
+      } else if (sale.tripSaleMethod == TripSaleMethod.extraSale) {
+        return tripProposalIds.contains(sale.tripProposal.id);
+      }
+      return false;
+    }).toList();
+
+    // Extract trip sale IDs
+    final tripSaleIds = filteredTripSales.map((sale) => sale.id).toSet();
+
+    // Filter invoices by matching saleOrderId with trip sale IDs
+    return allInvoices.where((invoice) => tripSaleIds.contains(invoice.saleOrderId)).toList();
   }
 
   Future<TripSaleInvoice> getTripSaleInvoiceById(int id) async {
@@ -203,13 +293,74 @@ class TripSaleRepository {
     required Pagination pagination,
     CancelToken? cancelToken,
     Allfilter? allfilter,
+    List<int>? assignedTripIds,
   }) async {
     final data = await remoteDataSource.getTripSaleReceipts(
       pagination: pagination,
       cancelToken: cancelToken,
       allFilterDTO: allfilter == null ? null : AllFilterDTO.fromDomain(allfilter),
     );
-    return data.map((e) => e.toDomain()).toList();
+
+    final allReceipts = data.map((e) => e.toDomain()).toList();
+
+    // If user has no trip assignments, show no data
+    if (assignedTripIds == null || assignedTripIds.isEmpty) {
+      return [];
+    }
+
+    // Get trip sale requests and proposals for assigned trips
+    final tripSaleRequests = await getTripSaleRequests(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    final tripProposals = await getTripProposals(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allfilter: null,
+      assignedTripIds: assignedTripIds,
+    );
+
+    // Get ALL trip sales and filter
+    final allTripSalesData = await remoteDataSource.getTripSales(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allFilterDTO: null,
+    );
+
+    final allTripSales = allTripSalesData.map((e) => e.toDomain()).toList();
+
+    final tripSaleRequestIds = tripSaleRequests.map((req) => req.id).toSet();
+    final tripProposalIds = tripProposals.map((prop) => prop.id).toSet();
+
+    final filteredTripSales = allTripSales.where((sale) {
+      if (sale.tripSaleMethod == TripSaleMethod.saleRequest) {
+        return tripSaleRequestIds.contains(sale.tripSaleRequest.id);
+      } else if (sale.tripSaleMethod == TripSaleMethod.extraSale) {
+        return tripProposalIds.contains(sale.tripProposal.id);
+      }
+      return false;
+    }).toList();
+
+    final tripSaleIds = filteredTripSales.map((sale) => sale.id).toSet();
+
+    // Get ALL invoices and filter by trip sale IDs
+    final allInvoicesData = await remoteDataSource.getTripSaleInvoices(
+      pagination: (page: 1, query: ''),
+      cancelToken: null,
+      allFilterDTO: null,
+    );
+
+    final allInvoices = allInvoicesData.map((e) => e.toDomain()).toList();
+    final filteredInvoices = allInvoices.where((invoice) => tripSaleIds.contains(invoice.saleOrderId)).toList();
+
+    // Extract invoice IDs
+    final invoiceIds = filteredInvoices.map((invoice) => invoice.id).toSet();
+
+    // Filter receipts by matching tripSaleInvoiceId with invoice IDs
+    return allReceipts.where((receipt) => invoiceIds.contains(receipt.tripSaleInvoiceId)).toList();
   }
 
   Future<CustomResponse> makePaymentReceive(File? attachment, File signFile, TripSaleReceipt tripSaleReceipt) async {

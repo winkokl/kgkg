@@ -40,12 +40,43 @@ class PaginatedTripSaleNotifier extends PaginatedAsyncNotifier<TripSale> {
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      // Fetch all trip user assignments
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      // Find the assignment for the current user and extract trip IDs
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     return await ref.guardXFetch(() async {
       if (query.isEmpty) {
         final res = await tripsaleRepo.getTripSales(
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSale>(
@@ -63,6 +94,7 @@ class PaginatedTripSaleNotifier extends PaginatedAsyncNotifier<TripSale> {
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSale>(
@@ -85,10 +117,39 @@ class PaginatedTripSaleNotifier extends PaginatedAsyncNotifier<TripSale> {
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     final res = await tripsaleRepo.getTripSales(
       pagination: (page: page, query: query),
       cancelToken: cancelToken,
       allfilter: filter,
+      assignedTripIds: assignedTripIds,
     );
     return PaginatedData<TripSale>(
       items: res,
@@ -590,12 +651,41 @@ class PaginatedTripSaleInvoiceNotifier extends PaginatedAsyncNotifier<TripSaleIn
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     return await ref.guardXFetch(() async {
       if (query.isEmpty) {
         final res = await tripsaleRepo.getTripSaleInvoices(
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSaleInvoice>(
@@ -614,6 +704,7 @@ class PaginatedTripSaleInvoiceNotifier extends PaginatedAsyncNotifier<TripSaleIn
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSaleInvoice>(
@@ -637,10 +728,39 @@ class PaginatedTripSaleInvoiceNotifier extends PaginatedAsyncNotifier<TripSaleIn
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     final res = await tripsaleRepo.getTripSaleInvoices(
       pagination: (page: page, query: query),
       cancelToken: cancelToken,
       allfilter: filter,
+      assignedTripIds: assignedTripIds,
     );
     return PaginatedData<TripSaleInvoice>(
       items: res,
@@ -691,12 +811,41 @@ class PaginatedTripSaleReceiptNotifier extends PaginatedAsyncNotifier<TripSaleRe
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     return await ref.guardXFetch(() async {
       if (query.isEmpty) {
         final res = await tripsaleRepo.getTripSaleReceipts(
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSaleReceipt>(
@@ -715,6 +864,7 @@ class PaginatedTripSaleReceiptNotifier extends PaginatedAsyncNotifier<TripSaleRe
           pagination: (page: 1, query: query),
           cancelToken: cancelToken,
           allfilter: filter,
+          assignedTripIds: assignedTripIds,
         );
 
         return PaginatedData<TripSaleReceipt>(
@@ -738,10 +888,39 @@ class PaginatedTripSaleReceiptNotifier extends PaginatedAsyncNotifier<TripSaleRe
       cancelToken.cancel();
     });
 
+    // Get logged-in user info and their assigned trips
+    List<int>? assignedTripIds = [];
+    try {
+      final userInfo = await ref.watch(userInfoProvider.future);
+      final userName = userInfo.userName;
+
+      final tripUserAssigns = await tripsaleRepo.getTripUserAssigns(
+        pagination: (page: 1, query: userName),
+        cancelToken: null,
+        allfilter: null,
+      );
+
+      final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+      if (userAssignment != null) {
+        assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        assignedTripIds = [];
+      }
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.cancel) {
+        assignedTripIds = [];
+      } else {
+        rethrow;
+      }
+    } catch (e) {
+      assignedTripIds = [];
+    }
+
     final res = await tripsaleRepo.getTripSaleReceipts(
       pagination: (page: page, query: query),
       cancelToken: cancelToken,
       allfilter: filter,
+      assignedTripIds: assignedTripIds,
     );
     return PaginatedData<TripSaleReceipt>(
       items: res,
