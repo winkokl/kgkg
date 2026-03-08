@@ -82,10 +82,10 @@ class ProductDTO with _$ProductDTO {
     @JsonKey(name: "request_qty", includeToJson: false) @Default(0) int requestQty,
     @JsonKey(name: "terminate_sale_qty", includeToJson: false) @Default(0) int terminateSaleQty,
     @JsonKey(name: "unit_type_data", includeToJson: false) @Default([]) List<UnitTypeDTO> unitTypeDTOs,
-    @JsonKey(name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson) @Default(false) dynamic isPromotionItem,
-    @JsonKey(name: "sale_promotion_detail_id", includeToJson: false) int? salePromotionDetailId,
-    @JsonKey(name: "is_promotion_item_list", includeToJson: false) PromotionDetailDTO? promotionDetailDTO,
-    @JsonKey(name: "item_back_product") @Default(null) InfoDTO? itemBackProduct,
+    @JsonKey(name: "is_promotion_item", includeToJson: false, includeIfNull: false) dynamic isPromotionItem,
+    @JsonKey(name: "sale_promotion_detail_id", includeToJson: false, includeIfNull: false) int? salePromotionDetailId,
+    @JsonKey(name: "is_promotion_item_list", includeToJson: false, includeIfNull: false) PromotionDetailDTO? promotionDetailDTO,
+    @JsonKey(name: "item_back_product", includeIfNull: false) InfoDTO? itemBackProduct,
     @JsonKey(name: "product_code_prefix", includeToJson: false) @Default("") String? productCodePrefix,
     @JsonKey(name: "available_quantity", includeToJson: false) @Default(0) int? availableQtyFromWarehouse,
     @JsonKey(name: "_promo_discount", includeIfNull: false) @Default(null) dynamic promoDiscount, // Renamed for Dart style: _promo_discount -> promoDiscount
@@ -131,9 +131,11 @@ class ProductDTO with _$ProductDTO {
       availableQtyFromWarehouse: isConsignment || isReturn ? 0 : product.availableQty,
       availableReturnQty: product.availableReturnQty,
       consignmentContractQty: isConsignment ? product.consignmentContractQty : null,
-      isPromotionItem: product.isPromotionItem ? true : null,
-      promotionDetailDTO: product.isPromotionItem ? PromotionDetailDTO.fromDomain(product.promotionDetail) : null,
-      itemBackProduct: InfoDTO.fromDomain(product.itemBackProduct),
+      // Don't include promotion fields for trip sales to avoid database column errors
+      // Set to null so includeIfNull: false will exclude them from JSON
+      isPromotionItem: isTrip ? null : (product.isPromotionItem ? true : null),
+      promotionDetailDTO: isTrip ? null : (product.isPromotionItem ? PromotionDetailDTO.fromDomain(product.promotionDetail) : null),
+      itemBackProduct: isTrip ? null : (product.itemBackProduct.promotionName.isEmpty ? null : InfoDTO.fromDomain(product.itemBackProduct)),
     );
   }
 

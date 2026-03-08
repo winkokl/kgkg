@@ -106,14 +106,20 @@ mixin _$ProductDTO {
   @JsonKey(name: "unit_type_data", includeToJson: false)
   List<UnitTypeDTO> get unitTypeDTOs => throw _privateConstructorUsedError;
   @JsonKey(
-      name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson)
+      name: "is_promotion_item", includeToJson: false, includeIfNull: false)
   dynamic get isPromotionItem => throw _privateConstructorUsedError;
-  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+  @JsonKey(
+      name: "sale_promotion_detail_id",
+      includeToJson: false,
+      includeIfNull: false)
   int? get salePromotionDetailId => throw _privateConstructorUsedError;
-  @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+  @JsonKey(
+      name: "is_promotion_item_list",
+      includeToJson: false,
+      includeIfNull: false)
   PromotionDetailDTO? get promotionDetailDTO =>
       throw _privateConstructorUsedError;
-  @JsonKey(name: "item_back_product")
+  @JsonKey(name: "item_back_product", includeIfNull: false)
   InfoDTO? get itemBackProduct => throw _privateConstructorUsedError;
   @JsonKey(name: "product_code_prefix", includeToJson: false)
   String? get productCodePrefix => throw _privateConstructorUsedError;
@@ -206,15 +212,20 @@ abstract class $ProductDTOCopyWith<$Res> {
       @JsonKey(name: "unit_type_data", includeToJson: false)
       List<UnitTypeDTO> unitTypeDTOs,
       @JsonKey(
-          name: "is_promotion_item",
-          toJson: _booltoJson,
-          fromJson: _boolfromJson)
+          name: "is_promotion_item", includeToJson: false, includeIfNull: false)
       dynamic isPromotionItem,
-      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      @JsonKey(
+          name: "sale_promotion_detail_id",
+          includeToJson: false,
+          includeIfNull: false)
       int? salePromotionDetailId,
-      @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+      @JsonKey(
+          name: "is_promotion_item_list",
+          includeToJson: false,
+          includeIfNull: false)
       PromotionDetailDTO? promotionDetailDTO,
-      @JsonKey(name: "item_back_product") InfoDTO? itemBackProduct,
+      @JsonKey(name: "item_back_product", includeIfNull: false)
+      InfoDTO? itemBackProduct,
       @JsonKey(name: "product_code_prefix", includeToJson: false)
       String? productCodePrefix,
       @JsonKey(name: "available_quantity", includeToJson: false)
@@ -611,15 +622,20 @@ abstract class _$$ProductDTOImplCopyWith<$Res>
       @JsonKey(name: "unit_type_data", includeToJson: false)
       List<UnitTypeDTO> unitTypeDTOs,
       @JsonKey(
-          name: "is_promotion_item",
-          toJson: _booltoJson,
-          fromJson: _boolfromJson)
+          name: "is_promotion_item", includeToJson: false, includeIfNull: false)
       dynamic isPromotionItem,
-      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      @JsonKey(
+          name: "sale_promotion_detail_id",
+          includeToJson: false,
+          includeIfNull: false)
       int? salePromotionDetailId,
-      @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+      @JsonKey(
+          name: "is_promotion_item_list",
+          includeToJson: false,
+          includeIfNull: false)
       PromotionDetailDTO? promotionDetailDTO,
-      @JsonKey(name: "item_back_product") InfoDTO? itemBackProduct,
+      @JsonKey(name: "item_back_product", includeIfNull: false)
+      InfoDTO? itemBackProduct,
       @JsonKey(name: "product_code_prefix", includeToJson: false)
       String? productCodePrefix,
       @JsonKey(name: "available_quantity", includeToJson: false)
@@ -984,13 +1000,13 @@ class _$ProductDTOImpl extends _ProductDTO {
       this.terminateSaleQty = 0,
       @JsonKey(name: "unit_type_data", includeToJson: false)
       final List<UnitTypeDTO> unitTypeDTOs = const [],
-      @JsonKey(name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson)
-      this.isPromotionItem = false,
-      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      @JsonKey(name: "is_promotion_item", includeToJson: false, includeIfNull: false)
+      this.isPromotionItem,
+      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false, includeIfNull: false)
       this.salePromotionDetailId,
-      @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+      @JsonKey(name: "is_promotion_item_list", includeToJson: false, includeIfNull: false)
       this.promotionDetailDTO,
-      @JsonKey(name: "item_back_product") this.itemBackProduct = null,
+      @JsonKey(name: "item_back_product", includeIfNull: false) this.itemBackProduct,
       @JsonKey(name: "product_code_prefix", includeToJson: false) this.productCodePrefix = "",
       @JsonKey(name: "available_quantity", includeToJson: false) this.availableQtyFromWarehouse = 0,
       @JsonKey(name: "_promo_discount", includeIfNull: false) this.promoDiscount = null,
@@ -1140,16 +1156,22 @@ class _$ProductDTOImpl extends _ProductDTO {
 
   @override
   @JsonKey(
-      name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson)
+      name: "is_promotion_item", includeToJson: false, includeIfNull: false)
   final dynamic isPromotionItem;
   @override
-  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+  @JsonKey(
+      name: "sale_promotion_detail_id",
+      includeToJson: false,
+      includeIfNull: false)
   final int? salePromotionDetailId;
   @override
-  @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+  @JsonKey(
+      name: "is_promotion_item_list",
+      includeToJson: false,
+      includeIfNull: false)
   final PromotionDetailDTO? promotionDetailDTO;
   @override
-  @JsonKey(name: "item_back_product")
+  @JsonKey(name: "item_back_product", includeIfNull: false)
   final InfoDTO? itemBackProduct;
   @override
   @JsonKey(name: "product_code_prefix", includeToJson: false)
@@ -1406,15 +1428,20 @@ abstract class _ProductDTO extends ProductDTO {
       @JsonKey(name: "unit_type_data", includeToJson: false)
       final List<UnitTypeDTO> unitTypeDTOs,
       @JsonKey(
-          name: "is_promotion_item",
-          toJson: _booltoJson,
-          fromJson: _boolfromJson)
+          name: "is_promotion_item", includeToJson: false, includeIfNull: false)
       final dynamic isPromotionItem,
-      @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+      @JsonKey(
+          name: "sale_promotion_detail_id",
+          includeToJson: false,
+          includeIfNull: false)
       final int? salePromotionDetailId,
-      @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+      @JsonKey(
+          name: "is_promotion_item_list",
+          includeToJson: false,
+          includeIfNull: false)
       final PromotionDetailDTO? promotionDetailDTO,
-      @JsonKey(name: "item_back_product") final InfoDTO? itemBackProduct,
+      @JsonKey(name: "item_back_product", includeIfNull: false)
+      final InfoDTO? itemBackProduct,
       @JsonKey(name: "product_code_prefix", includeToJson: false)
       final String? productCodePrefix,
       @JsonKey(name: "available_quantity", includeToJson: false)
@@ -1562,16 +1589,22 @@ abstract class _ProductDTO extends ProductDTO {
   List<UnitTypeDTO> get unitTypeDTOs;
   @override
   @JsonKey(
-      name: "is_promotion_item", toJson: _booltoJson, fromJson: _boolfromJson)
+      name: "is_promotion_item", includeToJson: false, includeIfNull: false)
   dynamic get isPromotionItem;
   @override
-  @JsonKey(name: "sale_promotion_detail_id", includeToJson: false)
+  @JsonKey(
+      name: "sale_promotion_detail_id",
+      includeToJson: false,
+      includeIfNull: false)
   int? get salePromotionDetailId;
   @override
-  @JsonKey(name: "is_promotion_item_list", includeToJson: false)
+  @JsonKey(
+      name: "is_promotion_item_list",
+      includeToJson: false,
+      includeIfNull: false)
   PromotionDetailDTO? get promotionDetailDTO;
   @override
-  @JsonKey(name: "item_back_product")
+  @JsonKey(name: "item_back_product", includeIfNull: false)
   InfoDTO? get itemBackProduct;
   @override
   @JsonKey(name: "product_code_prefix", includeToJson: false)

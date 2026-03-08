@@ -14,6 +14,7 @@ import 'package:mgkaung_dms_mobile/core/presentation/widgets/loading_overlay.dar
 import 'package:mgkaung_dms_mobile/features/core/application/all_filter_provider.dart';
 import 'package:mgkaung_dms_mobile/features/core/application/search_query_notifier.dart';
 import 'package:mgkaung_dms_mobile/features/customer/domain/business_unit.dart';
+import 'package:mgkaung_dms_mobile/features/home/application/home_notifier.dart';
 import 'package:mgkaung_dms_mobile/features/customer/presentation/widgets/show_bu_search_form.dart';
 import 'package:mgkaung_dms_mobile/features/customer/presentation/widgets/show_customer_search_form.dart';
 import 'package:mgkaung_dms_mobile/features/marketing_promotion/presentation/good_requisition_form_screen.dart';
@@ -102,29 +103,108 @@ class TripSaleInfoForm extends HookConsumerWidget {
       return null;
     }, []);
 
-    // Auto-select the last trip sale request ID on first load
+    // Auto-select the last trip sale request ID on first load (for ALL tabs)
+    // Directly call the API to fetch trip sale requests, regardless of which tab you came from
     useEffect(() {
-      if (!isEdit && tripSaleMethod == TripSaleMethod.saleRequest && tripSaleRequest.id == -1) {
-        ref.read(paginatedTripSaleRequestNotifierProvider.future).then((paginatedData) {
-          if (paginatedData.items.isNotEmpty) {
-            final latestTripSaleRequest = paginatedData.items.first;
-            // Fetch full details and set the trip sale request
-            ref.read(tripSaleRepositoryProvider).getTripSaleRequestById(latestTripSaleRequest.id).then((fullTripSaleRequest) {
-              final products = getModifiedProducts(fullTripSaleRequest, true);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ref.read(productListNotifierProvider.notifier).setProductList(products);
-                saleNotifier.setTripSaleRequest(fullTripSaleRequest);
-              });
+      if (!isEdit && tripSaleRequest.id == -1) {
+        // Show loading while fetching
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          LoadingOverlay.show();
+        });
+
+        // Directly call the repository to fetch trip sale requests
+        final repository = ref.read(tripSaleRepositoryProvider);
+
+        // Get user info for assigned trip filtering
+        ref.read(userInfoProvider.future).then((userInfo) {
+          final userName = userInfo.userName;
+
+          // Fetch trip user assignments
+          repository.getTripUserAssigns(
+            pagination: (page: 1, query: userName),
+            cancelToken: null,
+            allfilter: null,
+          ).then((tripUserAssigns) {
+            // Find assigned trip IDs
+            final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
+            final assignedTripIds = userAssignment?.trips.map((trip) => trip.id).toList() ?? [];
+
+            // Fetch trip sale requests with assigned trip filter
+            repository.getTripSaleRequests(
+              pagination: (page: 1, query: ''),
+              cancelToken: null,
+              allfilter: null,
+              assignedTripIds: assignedTripIds.isEmpty ? [] : assignedTripIds,
+            ).then((tripSaleRequests) {
+              if (tripSaleRequests.isNotEmpty) {
+                final latestTripSaleRequest = tripSaleRequests.first;
+                // Fetch full details and set the trip sale request
+                repository.getTripSaleRequestById(latestTripSaleRequest.id).then((fullTripSaleRequest) {
+                  final products = getModifiedProducts(fullTripSaleRequest, true);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ref.read(productListNotifierProvider.notifier).setProductList(products);
+                    saleNotifier.setTripSaleRequest(fullTripSaleRequest);
+                    LoadingOverlay.hide();
+                  });
+                }).catchError((error) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    LoadingOverlay.hide();
+                  });
+                  // Silently handle error, user can still manually select
+                });
+              } else {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  LoadingOverlay.hide();
+                });
+              }
             }).catchError((error) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                LoadingOverlay.hide();
+              });
               // Silently handle error, user can still manually select
             });
-          }
+          }).catchError((error) {
+            // If trip user assignment fetch fails, fetch all trip sale requests
+            repository.getTripSaleRequests(
+              pagination: (page: 1, query: ''),
+              cancelToken: null,
+              allfilter: null,
+              assignedTripIds: [],
+            ).then((tripSaleRequests) {
+              if (tripSaleRequests.isNotEmpty) {
+                final latestTripSaleRequest = tripSaleRequests.first;
+                repository.getTripSaleRequestById(latestTripSaleRequest.id).then((fullTripSaleRequest) {
+                  final products = getModifiedProducts(fullTripSaleRequest, true);
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ref.read(productListNotifierProvider.notifier).setProductList(products);
+                    saleNotifier.setTripSaleRequest(fullTripSaleRequest);
+                    LoadingOverlay.hide();
+                  });
+                }).catchError((error) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    LoadingOverlay.hide();
+                  });
+                });
+              } else {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  LoadingOverlay.hide();
+                });
+              }
+            }).catchError((error) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                LoadingOverlay.hide();
+              });
+            });
+          });
         }).catchError((error) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            LoadingOverlay.hide();
+          });
           // Silently handle error, user can still manually select
         });
       }
       return null;
-    }, [tripSaleMethod]);
+    }, []);
 
     // Auto-select promotion when customer and business unit are selected
     useEffect(() {
@@ -134,6 +214,7 @@ class TripSaleInfoForm extends HookConsumerWidget {
             final firstPromotion = promotions.first;
             WidgetsBinding.instance.addPostFrameCallback((_) {
               saleNotifier.setPromotion(firstPromotion);
+              // Loading will be handled by salePromotionNotifierProvider listener
               ref.read(salePromotionNotifierProvider.notifier).getById(firstPromotion.id);
             });
           }
@@ -269,7 +350,7 @@ class TripSaleInfoForm extends HookConsumerWidget {
                 const SizedBox(height: 20),
                 if (tripSaleMethod == TripSaleMethod.saleRequest) ...[
                   FormTextInput(
-                    label: "Trip Sale IDfsadfdsfsadf *",
+                    label: "Trip Sale ID *",
                     hintText: "Select Trip Sale ID",
                     key: UniqueKey(),
                     isReadOnly: true,

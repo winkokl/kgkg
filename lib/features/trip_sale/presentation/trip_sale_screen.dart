@@ -9,6 +9,8 @@ import 'package:mgkaung_dms_mobile/features/core/widgets/add_button.dart';
 import 'package:mgkaung_dms_mobile/features/core/widgets/custom_tab_hook.dart';
 import 'package:mgkaung_dms_mobile/features/core/widgets/search_text_field.dart';
 import 'package:mgkaung_dms_mobile/features/product/application/product_list_notifier.dart';
+import 'package:mgkaung_dms_mobile/features/trip_sale/application/providers.dart';
+import 'package:mgkaung_dms_mobile/features/trip_sale/application/trip_sale_form_notifier.dart';
 import 'package:mgkaung_dms_mobile/features/trip_sale/presentation/widgets/invoice/trip_sale_invoice_tab.dart';
 import 'package:mgkaung_dms_mobile/features/trip_sale/presentation/widgets/payment_receive/payment_receive_tab.dart';
 import 'package:mgkaung_dms_mobile/features/trip_sale/presentation/widgets/sale/trip_proposal_tab.dart';
@@ -57,6 +59,8 @@ class TripSaleScreen extends HookConsumerWidget {
                 AddButton(
                   onTap: () {
                     ref.invalidate(productListNotifierProvider);
+                    ref.invalidate(tripSaleFormNotifierProvider);
+                    ref.invalidate(paginatedTripSaleRequestNotifierProvider);
 
                     ref.watch(goRouterProvider).push(const TripSaleFormRoute(isEdit: false).location);
                   },

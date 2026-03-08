@@ -112,7 +112,7 @@ class PaginatedTripSaleRequestNotifier extends PaginatedAsyncNotifier<TripSaleRe
     });
 
     // Get logged-in user info and their assigned trips
-    List<int>? assignedTripIds;
+    List<int>? assignedTripIds = [];
     try {
       final userInfo = await ref.watch(userInfoProvider.future);
       final userName = userInfo.userName;
@@ -128,16 +128,20 @@ class PaginatedTripSaleRequestNotifier extends PaginatedAsyncNotifier<TripSaleRe
       final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
       if (userAssignment != null) {
         assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        // No assignment found - keep empty list to show no data
+        assignedTripIds = [];
       }
     } on DioException catch (e) {
-      // If request is cancelled or fails, show all trip sale requests
+      // If request fails, show only assigned trips (empty if none)
       if (e.type == DioExceptionType.cancel) {
-        assignedTripIds = null;
+        assignedTripIds = [];
       } else {
         rethrow;
       }
     } catch (e) {
-      assignedTripIds = null;
+      // On any error, show only assigned trips (empty if none)
+      assignedTripIds = [];
     }
 
     return await ref.guardXFetch(() async {
@@ -189,7 +193,7 @@ class PaginatedTripSaleRequestNotifier extends PaginatedAsyncNotifier<TripSaleRe
     });
 
     // Get logged-in user info and their assigned trips
-    List<int>? assignedTripIds;
+    List<int>? assignedTripIds = [];
     try {
       final userInfo = await ref.watch(userInfoProvider.future);
       final userName = userInfo.userName;
@@ -205,16 +209,20 @@ class PaginatedTripSaleRequestNotifier extends PaginatedAsyncNotifier<TripSaleRe
       final userAssignment = tripUserAssigns.where((assign) => assign.userName == userName).firstOrNull;
       if (userAssignment != null) {
         assignedTripIds = userAssignment.trips.map((trip) => trip.id).toList();
+      } else {
+        // No assignment found - keep empty list to show no data
+        assignedTripIds = [];
       }
     } on DioException catch (e) {
-      // If request is cancelled or fails, show all trip sale requests
+      // If request fails, show only assigned trips (empty if none)
       if (e.type == DioExceptionType.cancel) {
-        assignedTripIds = null;
+        assignedTripIds = [];
       } else {
         rethrow;
       }
     } catch (e) {
-      assignedTripIds = null;
+      // On any error, show only assigned trips (empty if none)
+      assignedTripIds = [];
     }
 
     final res = await tripsaleRepo.getTripSaleRequests(

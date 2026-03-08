@@ -130,7 +130,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
     // Calculate discount and tax from products when promotion items exist
     useEffect(() {
       if (hasPromotionItems) {
-        // Calculate total discount from all products (for display only)
+        // Calculate total discount from all products
         final totalProductDiscount = productlist.isEmpty
             ? 0.0
             : productlist.map((e) {
@@ -146,10 +146,10 @@ class DisplayTotalWidget extends HookConsumerWidget {
                 }
               }).reduce((value, element) => value + element);
 
-        // Calculate total tax from all products (for display only)
+        // Calculate total tax from all products
         final totalProductTax = productlist.isEmpty ? 0.0 : productlist.map((e) => e.taxAmount).reduce((value, element) => value + element);
 
-        // Update the discount and tax amounts (for display only)
+        // Update the discount and tax amounts
         discountAmount.value = totalProductDiscount;
         taxAmount.value = totalProductTax;
 
@@ -157,8 +157,8 @@ class DisplayTotalWidget extends HookConsumerWidget {
         discountController.text = formatter.format(totalProductDiscount);
         taxController.text = formatter.format(totalProductTax);
 
-        // Grand total = subtotal (already includes discount and tax) + other charges
-        final totalAmount = subtotal + otherChargesAmount.value;
+        // Recalculate grand total
+        final totalAmount = subtotal + totalProductTax + otherChargesAmount.value - totalProductDiscount;
         grandTotal.value = roundToNextHundred(totalAmount);
       }
       return null;
@@ -225,7 +225,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Discount", color: secondaryTextColor)),
+                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Discount--", color: secondaryTextColor)),
                       ),
                       Expanded(
                         flex: 2,
