@@ -20,19 +20,7 @@ import 'package:mgkaung_dms_mobile/features/sale_promotion/domain/sale_promotion
 import 'package:mgkaung_dms_mobile/features/secondary_sale/presentation/widgets/sale/sale_promotion_overview._widget.dart';
 
 class DisplayTotalWidget extends HookConsumerWidget {
-  const DisplayTotalWidget({
-    super.key,
-    required this.isReadOnly,
-    this.salePromotion,
-    this.discountOnSaved,
-    this.taxOnSaved,
-    this.otherChargesOnSaved,
-    this.subtotalOnSaved,
-    this.grandTotalOnSaved,
-    this.typeSaved,
-    this.discountAmountOnSaved,
-    this.taxAmountOnSaved,
-  });
+  const DisplayTotalWidget({super.key, required this.isReadOnly, this.salePromotion, this.discountOnSaved, this.taxOnSaved, this.otherChargesOnSaved, this.subtotalOnSaved, this.grandTotalOnSaved, this.typeSaved, this.discountAmountOnSaved, this.taxAmountOnSaved});
   final bool isReadOnly;
   final SalePromotion? salePromotion;
   final Function(String? v)? discountOnSaved;
@@ -56,15 +44,12 @@ class DisplayTotalWidget extends HookConsumerWidget {
     final promtionItemList = productlist.where((element) => element.isPromotionItem).toList();
     final hasPromotionItems = promtionItemList.isNotEmpty;
 
-    final subtotal = productlist.isEmpty
-        ? 0
-        : productlist.map((e) => e.totalAmount).reduce(
-              (value, element) => value + element,
-            );
+    final subtotal = productlist.isEmpty ? 0 : productlist.map((e) => e.totalAmount).reduce((value, element) => value + element);
 
     final discountValue = useState(totalCharges.discount);
     final taxValue = useState(totalCharges.tax);
-    final grandTotal = useState(roundToNextHundred(totalCharges.grandtotal));
+    // final grandTotal = useState(roundToNextHundred(totalCharges.grandtotal));
+    final grandTotal = useState(totalCharges.grandtotal);
     final discountAmount = useState(totalCharges.discountAmount);
     final taxAmount = useState(totalCharges.taxAmount);
     final otherChargesAmount = useState(totalCharges.otherChargesAmount);
@@ -99,14 +84,15 @@ class DisplayTotalWidget extends HookConsumerWidget {
 
       final otherCharges = otherChargesFieldValue;
 
-      final totalAmount = amount + tax + otherCharges - discount;
+      final totalAmount = amount + tax + otherCharges;
 
       print("discountType: ${discountType.value}, discountFieldValue: $discountFieldValue, calculated discount: $discount");
       print("taxType: ${taxType.value}, taxFieldValue: $taxFieldValue, calculated tax: $tax");
 
       discountValue.value = discountFieldValue;
       taxValue.value = taxFieldValue;
-      grandTotal.value = roundToNextHundred(totalAmount);
+      // grandTotal.value = roundToNextHundred(totalAmount);
+      grandTotal.value = totalAmount;
       discountAmount.value = discount;
       taxAmount.value = tax;
       otherChargesAmount.value = otherCharges;
@@ -130,26 +116,28 @@ class DisplayTotalWidget extends HookConsumerWidget {
     // Calculate discount and tax from products when promotion items exist
     useEffect(() {
       if (hasPromotionItems) {
-        // Calculate total discount from all products
+        // Calculate total discount from all products (for display only)
         final totalProductDiscount = productlist.isEmpty
             ? 0.0
-            : productlist.map((e) {
-                final qty = e.quantity;
-                final discountPerUnit = e.discountAmount;
-                final discountTypeLocal = e.discountType;
+            : productlist
+                  .map((e) {
+                    final qty = e.quantity;
+                    final discountPerUnit = e.discountAmount;
+                    final discountTypeLocal = e.discountType;
 
-                // Calculate discount based on type
-                if (discountTypeLocal == AmountOrPercentStatus.amount) {
-                  return discountPerUnit * qty;
-                } else {
-                  return (discountPerUnit / 100) * e.amount;
-                }
-              }).reduce((value, element) => value + element);
+                    // Calculate discount based on type
+                    if (discountTypeLocal == AmountOrPercentStatus.amount) {
+                      return discountPerUnit * qty;
+                    } else {
+                      return (discountPerUnit / 100) * e.amount;
+                    }
+                  })
+                  .reduce((value, element) => value + element);
 
-        // Calculate total tax from all products
+        // Calculate total tax from all products (for display only)
         final totalProductTax = productlist.isEmpty ? 0.0 : productlist.map((e) => e.taxAmount).reduce((value, element) => value + element);
 
-        // Update the discount and tax amounts
+        // Update the discount and tax amounts (for display only)
         discountAmount.value = totalProductDiscount;
         taxAmount.value = totalProductTax;
 
@@ -157,9 +145,11 @@ class DisplayTotalWidget extends HookConsumerWidget {
         discountController.text = formatter.format(totalProductDiscount);
         taxController.text = formatter.format(totalProductTax);
 
-        // Recalculate grand total
-        final totalAmount = subtotal + totalProductTax + otherChargesAmount.value - totalProductDiscount;
-        grandTotal.value = roundToNextHundred(totalAmount);
+        // Grand total = subtotal (already includes discount and tax) + other charges
+        // final totalAmount = subtotal + otherChargesAmount.value;
+        final totalAmount = subtotal + totalProductTax + otherChargesAmount.value;
+        // grandTotal.value = roundToNextHundred(totalAmount);
+        grandTotal.value = totalAmount;
       }
       return null;
     }, [hasPromotionItems, productlist.length, subtotal]);
@@ -170,9 +160,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          TotalProductCard(
-            ontap: () => ref.watch(goRouterProvider).push(ProductListRoute(hasAction: !isReadOnly, isReturn: false).location),
-          ),
+          TotalProductCard(ontap: () => ref.watch(goRouterProvider).push(ProductListRoute(hasAction: !isReadOnly, isReturn: false).location)),
           if (salePromotion != null && salePromotion!.id != -1) ...[
             const SizedBox(height: 15),
             InkWell(
@@ -214,7 +202,10 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Sub Total", color: secondaryTextColor)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: HeaderText("Sub Total", color: secondaryTextColor),
+                        ),
                       ),
                       Expanded(
                         child: Align(alignment: Alignment.centerRight, child: HeaderText(formatter.format(subtotal))),
@@ -225,7 +216,10 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Discount", color: secondaryTextColor)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: HeaderText("Discount", color: secondaryTextColor),
+                        ),
                       ),
                       Expanded(
                         flex: 2,
@@ -260,7 +254,10 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Tax", color: secondaryTextColor)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: HeaderText("Tax", color: secondaryTextColor),
+                        ),
                       ),
                       Expanded(
                         flex: 2,
@@ -270,7 +267,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
                           inputFormatters: textInputFormats(taxType.value),
                           fillColor: isReadOnly || hasPromotionItems ? textFieldFillColor : null,
                           suffixicon: AmountOrPecentStatusWidget(
-                            isSelectable: !isReadOnly && !hasPromotionItems,
+                            isSelectable: isReadOnly && hasPromotionItems,
                             onSelect: () {
                               taxType.value = taxType.value.toggle;
                               taxController.text = "";
@@ -292,21 +289,14 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Other Charges", color: secondaryTextColor)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: HeaderText("Other Charges", color: secondaryTextColor),
+                        ),
                       ),
                       Expanded(
                         flex: 2,
-                        child: FormTextInput(
-                          isReadOnly: isReadOnly,
-                          controller: otherChargesController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'^[+-]?\d{0,100}'),
-                            )
-                          ],
-                          fillColor: isReadOnly ? textFieldFillColor : null,
-                          onSaved: otherChargesOnSaved,
-                        ),
+                        child: FormTextInput(isReadOnly: isReadOnly, controller: otherChargesController, inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^[+-]?\d{0,100}'))], fillColor: isReadOnly ? textFieldFillColor : null, onSaved: otherChargesOnSaved),
                       ),
                       Expanded(
                         child: Align(alignment: Alignment.centerRight, child: HeaderText(formatter.format(otherChargesAmount.value))),
@@ -317,7 +307,10 @@ class DisplayTotalWidget extends HookConsumerWidget {
                   Row(
                     children: [
                       const Expanded(
-                        child: Align(alignment: Alignment.centerLeft, child: HeaderText("Grand Total", color: secondaryTextColor)),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: HeaderText("Grand Total", color: secondaryTextColor),
+                        ),
                       ),
                       Expanded(
                         child: Align(alignment: Alignment.centerRight, child: HeaderText(formatter.format(grandTotal.value))),
@@ -327,7 +320,7 @@ class DisplayTotalWidget extends HookConsumerWidget {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
