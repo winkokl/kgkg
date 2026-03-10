@@ -14,7 +14,7 @@ class PrintSaleReturn {
   static Future<void> print(SaleReturnPrintFormat saleReturn) async {
     await SunmiPrinter.bindingPrinter();
     await SunmiPrinter.initPrinter();
-    Uint8List byte = await getImageFromAsset('assets/images/logo.png');
+    Uint8List byte = await getResizedImageFromAsset('assets/images/logo.png', targetWidth: 200);
     await SunmiPrinter.startTransactionPrint(true);
 
     await SunmiPrinter.setAlignment(SunmiPrintAlign.CENTER);

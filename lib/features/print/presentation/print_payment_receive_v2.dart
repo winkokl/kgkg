@@ -26,7 +26,7 @@ class PrintPaymentV2 {
       final service = printerManager.service;
 
       // Get logo
-      final Uint8List logoBytes = await getImageFromAsset('assets/images/logo.png');
+      final Uint8List logoBytes = await getResizedImageFromAsset('assets/images/logo.png', targetWidth: 200);
 
       await service.startTransactionPrint(true);
 

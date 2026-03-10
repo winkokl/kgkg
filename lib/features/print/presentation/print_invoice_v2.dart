@@ -34,7 +34,7 @@ class PrintInvoiceV2 {
       }
 
       // Get logo
-      Uint8List logoBytes = await getImageFromAsset('assets/images/logo.png');
+      Uint8List logoBytes = await getResizedImageFromAsset('assets/images/logo.png', targetWidth: 200);
 
       // Start transaction
       final service = printerManager.service;

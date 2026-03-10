@@ -25,7 +25,7 @@ class PrintSaleOrderV2 {
 
       final service = printerManager.service;
 
-      final Uint8List logo = await getImageFromAsset('assets/images/logo.png');
+      final Uint8List logo = await getResizedImageFromAsset('assets/images/logo.png', targetWidth: 200);
 
       await service.startTransactionPrint(true);
 
